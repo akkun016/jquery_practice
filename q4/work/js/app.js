@@ -5,7 +5,7 @@ $(function() {
     $(".description li").attr("class", "is-hidden");
 
     // class="nav"のクリックされた子要素のインデックス番号の取得
-    let itemNum = $(this).index();
+    const itemNum = $(this).index();
     // class="description"の子要素の"itemNum"番目のクラスを削除
     $(".description li").eq(itemNum).removeClass();
   })

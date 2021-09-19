@@ -1,8 +1,8 @@
 $(function() {
   // 'displayResult'という名前の関数を作成。
   function displayResult(result) {
-    // 'array'に引数'resulet' の0番目のデータの、'items'を取得し代入。（データは配列）
-    let array = result[0].items;
+    // 'array'に引数'result' の0番目のデータの、'items'を取得し代入。（データは配列）
+    const array = result[0].items;
     // 'array'の中身がからであれば
     if(array === undefined) {
       // class="message"の要素を削除。
@@ -75,7 +75,7 @@ $(function() {
   // 検索機能の実装。class="search-btn"がクリックされたとき
   $(".search-btn").on("click", function() {
     // 'serchWord'に、id="serch-input"のvalueを代入。
-    let searchWord = $("#search-input").val();
+    const searchWord = $("#search-input").val();
     // もし、'searchVal'（一度入力した情報）と'searchWord'（今回入力した情報）が同じであれば
     if (searchVal === searchWord) {
       // 'pageCount'に+1した数字を代入。

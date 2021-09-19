@@ -29,15 +29,16 @@ $(function () {
 
   // id="q5"をクリックしたとき
   $("#q5").on("click", function() {
+    const CenterBtn = $(this);
     // <button id="q5" class="btn">Q5</button> の前に文字を追加
-    $(this).before("DOMの前");
+    CenterBtn.before("DOMの前");
     // <button id="q5" class="btn">Q5</button> の後に文字を追加
-    $(this).after("DOMの後");
+    CenterBtn.after("DOMの後");
 
     // "Q5"の前に文字を追加
-    $(this).prepend("DOMの中の前");
+    CenterBtn.prepend("DOMの中の前");
     // "Q5"の後に文字を追加
-    $(this).append("DOMの中の後");
+    CenterBtn.append("DOMの中の後");
   });
 
 
@@ -55,35 +56,35 @@ $(function () {
   })
 
 
-  $("#q8").hover(
+  $("#q8").on({
     // id="q8"の上にカーソルが乗った時
-    function() {
+    "mouseenter":function() {
       // ".large"を追加
       $(this).addClass("large");
     },
     // id="q8"の上からカーソルが離れた時
-    function() {
+    "mouseleave":function() {
       // ".large"を削除
       $(this).removeClass("large");
     }
-  )
+  })
 
 
   // id="q9"の子要素をクリックしたとき
   $("#q9 li").on("click", function() {
-    // "i9"にその要素のインデックス番号を代入し
-    let i9 = $(this).index();
+    // "listIndex"にその要素のインデックス番号を代入し
+    const listIndex = $(this).index();
     // アラートで表示
-    alert(i9);
+    alert(listIndex);
   })
 
 
   // id="10"の子要素をクリックしたとき
   $("#q10 li").on("click", function() {
-    // "i10"にその要素のインデックス番号を代入し
-    let i10 = $(this).index();
+    // "clickItemNum"にその要素のインデックス番号を代入し
+    const clickItemNum = $(this).index();
 
     // id="q11"の子要素の、{i10}番目に"large-text"を追加
-    $("#q11 li").eq(i10).addClass("large-text");
+    $("#q11 li").eq(clickItemNum).addClass("large-text");
   })
 });
