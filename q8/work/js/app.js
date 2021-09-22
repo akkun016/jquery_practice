@@ -124,8 +124,3 @@ $(function() {
     $(".message").remove();
   });
 });
-
-
-
-
-text
