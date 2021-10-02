@@ -29,16 +29,8 @@ $(function () {
 
   // id="q5"をクリックしたとき
   $("#q5").on("click", function() {
-    const CenterBtn = $(this);
-    // <button id="q5" class="btn">Q5</button> の前に文字を追加
-    CenterBtn.before("DOMの前");
-    // <button id="q5" class="btn">Q5</button> の後に文字を追加
-    CenterBtn.after("DOMの後");
-
-    // "Q5"の前に文字を追加
-    CenterBtn.prepend("DOMの中の前");
-    // "Q5"の後に文字を追加
-    CenterBtn.append("DOMの中の後");
+    // <button id="q5" class="btn">Q5</button> の前後に文字を追加、"Q5"の前後に文字を追加
+    $(this).before("DOMの前").after("DOMの後").prepend("DOMの中の前").append("DOMの中の後");
   });
 
 
@@ -52,7 +44,7 @@ $(function () {
   // id="q7"をクリックしたとき
   $("#q7").on("click", function() {
     // id="q7"のオブジェクトを取得し、0番目のノードを指定し表示。
-    console.log($(this)[0])
+    console.log(this);
   })
 
 

@@ -1,77 +1,9 @@
 $(function() {
-  // 'displayResult'という名前の関数を作成。
-  function displayResult(result) {
-    // 'array'に引数'result' の0番目のデータの、'items'を取得し代入。（データは配列）
-    const array = result[0].items;
-    // 'array'の中身がからであれば
-    if(array === undefined) {
-      // class="message"の要素を削除。
-      $(".message").remove();
-      // class="inner"の中にメッセージを表示。
-      $(".inner").prepend(
-        `<div class="message">
-          <p>
-            検索結果が見つかりませんでした。</br>
-            別のキーワードで検索して下さい。
-          </p>
-        </div>`
-      );
-    // それ以外であれば
-    } else {
-      // class="message"の要素を削除。
-      $(".message").remove();
-      // each文で'array'を一つ一つ処理。
-      $.each(array, function(index, item){
-        // 引数'item'の各データを代入。
-        let itemTitle = item["title"];
-        let itemCreator = item["dc:creator"];
-        let itemPublisher = item["dc:publisher"];
-        let itemId = item["@id"];
-
-        // if文で、データが入っていないものには不明と代入。（'itemId'は"#"を代入しクリック時ページが移動しないようにする）
-        if(itemTitle === undefined) {
-          itemTitle = "タイトル不明";
-        } else if(itemCreator === undefined) {
-          itemCreator = "作者不明";
-        } else if(itemPublisher === undefined) {
-          itemPublisher = "出版社不明";
-        } else if(itemId === undefined) {
-          itemId = "#";
-        };
-
-        // class="list"にprepend(上に次々追加)でhtmlを追加。${}を付けることでjs内のデータを反映できる。
-        $(".lists").prepend(
-          `<li class="lists-item">
-            <div class="list-inner">
-              <p>タイトル：${itemTitle}</p>
-              <p>作者：${itemCreator}</p>
-              <p>出版社：${itemPublisher}</p>
-              <a href="${itemId}" target="_blank">書籍情報</a>
-            </div>
-          </li>`
-        );
-      })
-    };
-  }
-
-  function displayError(err) {
-    // class="message"の要素を削除。
-    $(".message").remove();
-    // class="inner"の中にメッセージを表示。
-    $(".inner").prepend(
-      `<div class="message">
-        <p>
-          正常に通信できませんでした。</br>
-          インターネットの接続の確認をしてください。
-        </p>
-      </div>`
-    );
-  }
-
   // 'pageCount'に開始時（リセット時）のページ番号１を代入。
   let pageCount = 1;
   // 'searchVal'をから宣言。一度調べた入力バリューを保管する。
   let searchVal = "";
+
   // 検索機能の実装。class="search-btn"がクリックされたとき
   $(".search-btn").on("click", function() {
     // 'serchWord'に、id="serch-input"のvalueを代入。
@@ -103,11 +35,90 @@ $(function() {
       // 'desplayResult'に'result'をまわし、処理。
       displayResult(result)
     // 通信失敗時（エラー時）
-    }).fail(function (err) {
+    }).fail(function (err, textStatus, errorThrown) {
       // 'desplayResult'に'err'をまわし、処理。
       displayError(err)
     });
   });
+
+
+  // 'displayResult'という名前の関数を作成。
+  function displayResult(result) {
+    // 'resultItemsAry'に引数'result' の0番目のデータの、'items'を取得し代入。（データは配列）
+    const resultItemsAry = result[0].items;
+    // 'resultItemsAry'の中身がからであれば
+    if(resultItemsAry === undefined) {
+      // class="message"の要素を削除。
+      $(".message").remove();
+      // class="inner"の中にメッセージを表示。
+      $(".inner").prepend(
+        `<div class="message">
+          <p>
+            検索結果が見つかりませんでした。</br>
+            別のキーワードで検索して下さい。
+          </p>
+        </div>`
+      );
+    // それ以外であれば
+    } else {
+      // class="message"の要素を削除。
+      $(".message").remove();
+      // each文で'resultItemsAry'を一つ一つ処理。
+      $.each(resultItemsAry, function(index, item){
+        // 引数'item'の各データを、三項演算子でデータの有無を判定し代入。
+        let itemTitle = item["title"] === undefined ? "タイトル不明" : item["title"];
+        let itemCreator = item["dc:creator"] === undefined ? "作者不明" : item["dc:creator"];
+        let itemPublisher = item["dc:publisher"] === undefined ? "出版社不明" : item["dc:publisher"];
+        let itemId = item["@id"] === undefined ? "#" : item["@id"];
+
+        // class="list"にprepend(上に次々追加)でhtmlを追加。${}を付けることでjs内のデータを反映できる。
+        $(".lists").prepend(
+          `<li class="lists-item">
+            <div class="list-inner">
+              <p>タイトル：${itemTitle}</p>
+              <p>作者：${itemCreator}</p>
+              <p>出版社：${itemPublisher}</p>
+              <a href="${itemId}" target="_blank">書籍情報</a>
+            </div>
+          </li>`
+        );
+      })
+    };
+  }
+
+
+  function displayError(err) {
+    // class="message"の要素を削除。
+    $(".message").remove();
+    // HTTPステータスコードがからのとき
+    if(err.status === 0) {
+      //  class="inner"に通信が正確にできなかった旨のメッセージを表示
+      $(".inner").prepend(
+        `<div class="message">
+          正常に通信できませんでした。</br>
+          インターネットの接続の確認をしてください。
+        </div>`
+      );
+    // HTTPステータスコードが400のとき
+    } else if(err.status === 400) {
+      //  class="inner"にリクエストが不正である(入力が入っていないなど)旨のメッセージを表示
+      $(".inner").prepend(
+        `<div class="message">
+          検索キーワードが有効ではありません。</br>
+          1文字以上で検索して下さい。
+        </div>`
+      );
+    // それ以外の場合
+    } else {
+      // エラーが発生したとメッセージを表示
+      $(".inner").prepend(
+        `<div class="message">
+          エラーが発生しました。
+        </div>`
+      );
+    }
+  }
+
 
   // キャンセルボタンの実装。class="reset-btn"がクリックされたとき
   $(".reset-btn").on("click", function() {
